@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-5 text-success mb-3">Thank you!</h1>
+    <p class="lead">Your payment was successful. We will prepare your saffron order for delivery.</p>
+    <a class="btn btn-primary mt-3" href="{{ url_for('shop.catalog') }}">Continue shopping</a>
+</div>
+{% endblock %}

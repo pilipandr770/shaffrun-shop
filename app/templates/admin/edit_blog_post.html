@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-4">Edit Blog Post</h1>
+<form method="post" enctype="multipart/form-data">
+    <div class="row g-3">
+        <div class="col-12">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" id="title" name="title" required value="{{ post.title }}">
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="content">Content (HTML supported)</label>
+            <textarea class="form-control" id="content" name="content" rows="12" required>{{ post.content }}</textarea>
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="image">Cover image</label>
+            <input class="form-control" id="image" name="image" type="file" accept="image/*">
+            <small class="d-block text-muted">Upload to replace the current image. Files are stored in the database.</small>
+        </div>
+        {% if post.image_data %}
+            <div class="col-12 col-md-6">
+                <div class="border rounded p-3 bg-light">
+                    <p class="text-muted small mb-2">Current cover image:</p>
+                    <img alt="{{ post.title }}" class="img-fluid rounded" src="{{ url_for('main.blog_image', post_id=post.id) }}">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center">
+                <div class="form-check mt-3">
+                    <input class="form-check-input" id="remove_image" name="remove_image" type="checkbox">
+                    <label class="form-check-label" for="remove_image">Remove current image</label>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="mt-4 d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" href="{{ url_for('admin.blog_posts') }}">Cancel</a>
+        <button class="btn btn-primary" type="submit">Update post</button>
+    </div>
+</form>
+{% endblock %}

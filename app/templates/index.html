@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero text-center mb-6">
+    <p class="hero-eyebrow text-uppercase fw-semibold mb-3">Voloskyi Saffron</p>
+    <h1 class="display-5 fw-bold mb-3">Crafted saffron, delivered with intelligence</h1>
+    <p class="lead mx-auto" style="max-width: 680px;">Premium saffron threads, data-driven storytelling, and a personal AI продавець to help you choose the perfect product for every plate.</p>
+    <div class="mt-4 d-flex flex-column flex-md-row justify-content-center gap-3">
+        <a class="btn btn-glow" href="{{ url_for('shop.catalog') }}">В магазин</a>
+        <a class="btn btn-outline-glow" href="{{ url_for('main.blog_list') }}">Читать блог</a>
+    </div>
+</section>
+
+<section class="feature-grid-section mb-6">
+    <div class="feature-grid">
+        <a class="feature-card feature-card--shop" href="{{ url_for('shop.catalog') }}">
+            <span class="feature-icon">🛍️</span>
+            <h2 class="feature-title">Магазин</h2>
+            <p class="feature-text">Категории, товары, оплата через Stripe — всё в одном месте.</p>
+        </a>
+        <a class="feature-card feature-card--blog" href="{{ url_for('main.blog_list') }}">
+            <span class="feature-icon">📰</span>
+            <h2 class="feature-title">Блог</h2>
+            <p class="feature-text">Щоденний контент від OpenAI: маркетинг, рецепти, натхнення.</p>
+        </a>
+        <a class="feature-card feature-card--ai" href="{{ url_for('main.index') }}#assistant">
+            <span class="feature-icon">🤖</span>
+            <h2 class="feature-title">Продавець ІІ</h2>
+            <p class="feature-text">Задай питання і отримай персональну рекомендацію від штучного інтелекту.</p>
+        </a>
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Новинки магазину</h2>
+            <p class="section-subtitle">Свіжі партії шафрану й подарункові набори від Voloskyi.</p>
+        </div>
+        <a class="link-arrow" href="{{ url_for('shop.catalog') }}">Перейти в магазин</a>
+    </div>
+    <div class="content-grid">
+        {% for product in products %}
+            <article class="content-card product-card h-100">
+                <div class="media-frame">
+                    {% if product.image_data %}
+                        <img alt="{{ product.title }}" src="{{ url_for('shop.product_image', product_id=product.id) }}">
+                    {% else %}
+                        <div class="media-placeholder">Фото скоро</div>
+                    {% endif %}
+                </div>
+                <div class="content-card-body">
+                    <h3 class="h5 mb-2">{{ product.title }}</h3>
+                    <p class="text-muted mb-3">{{ product.description[:150] }}{% if product.description|length > 150 %}…{% endif %}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-tag">€{{ '%.2f'|format(product.price) }}</span>
+                        <a class="btn btn-soft" href="{{ url_for('shop.product', product_id=product.id) }}">Детальніше</a>
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <p class="text-muted">Додайте товари через адмін-панель, щоби показати їх тут.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Свіжі історії</h2>
+            <p class="section-subtitle">Аналітика, користь шафрану та ідеї для бізнесу щодня.</p>
+        </div>
+        <a class="link-arrow" href="{{ url_for('main.blog_list') }}">Читати всі статті</a>
+    </div>
+    <div class="content-grid">
+        {% for post in posts %}
+            <article class="content-card h-100">
+                {% if post.image_data %}
+                    <div class="media-frame media-frame--wide">
+                        <img alt="{{ post.title }}" src="{{ url_for('main.blog_image', post_id=post.id) }}">
+                    </div>
+                {% endif %}
+                <div class="content-card-body">
+                    <h3 class="h5 mb-2">{{ post.title }}</h3>
+                    <p class="text-muted mb-3">{{ post.content[:180] }}{% if post.content|length > 180 %}…{% endif %}</p>
+                    <a class="link-arrow" href="{{ url_for('main.blog_detail', post_id=post.id) }}">Читати</a>
+                </div>
+            </article>
+        {% else %}
+            <p class="text-muted">OpenAI-генератор скоро додасть першу статтю.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="assistant-section" id="assistant">
+    <div class="assistant-card">
+        <div class="assistant-body">
+            <h2 class="section-title text-white mb-3">AI продавець Voloskyi</h2>
+            <p class="text-white-50 mb-4">Постав питання про шафран, доставки або гуртові умови — асистент знає дані магазину, категорій та блогу.</p>
+            <form id="assistant-form" class="assistant-form">
+                <label class="form-label text-white" for="assistant-question">Ваше питання</label>
+                <textarea class="form-control form-control-lg" id="assistant-question" name="question" rows="4" placeholder="Який шафран підійде для десертів?" required></textarea>
+                <button class="btn btn-glow mt-3" type="submit">Запитати</button>
+            </form>
+        </div>
+        <div class="assistant-response" id="assistant-response">
+            <p class="text-white-50 mb-0">Асистент відповість тут. Спробуйте поставити питання про новинки або рецепти.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

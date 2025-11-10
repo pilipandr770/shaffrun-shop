@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: saffron-shop
+    runtime: python
+    region: frankfurt
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --worker-class sync --workers 3 --timeout 120
+    preDeployCommand: flask db upgrade
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.6
+      - key: FLASK_APP
+        value: app
+      - key: SECRET_KEY
+        value: "set-in-render-dashboard"
+      - key: DATABASE_URL
+        value: "postgresql://ittoken_db_user:Xm98VVSZv7cMJkopkdWRkgvZzC7Aly42@dpg-d0visga4d50c73ekmu4g-a.frankfurt-postgres.render.com/ittoken_db?sslmode=require"
+      - key: DB_SCHEMA
+        value: saffron_shop
+      - key: BASE_URL
+        value: https://saffron-shop.onrender.com
+      - key: STRIPE_PUBLIC_KEY
+        value: "set-in-render-dashboard"
+      - key: STRIPE_SECRET_KEY
+        value: "set-in-render-dashboard"
+      - key: OPENAI_API_KEY
+        value: "set-in-render-dashboard"

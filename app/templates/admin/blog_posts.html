@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="h4 mb-0">Publish Blog Post</h1>
+                    <form action="{{ url_for('admin.generate_blog_post_now') }}" method="post">
+                        <button class="btn btn-outline-primary" type="submit">Generate AI article now</button>
+                    </form>
+                </div>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label" for="title">Title</label>
+                        <input class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="blog-image">Cover image</label>
+                        <input class="form-control" id="blog-image" name="image" type="file" accept="image/*">
+                        <small class="text-muted">Опціонально. Файл збережеться в базі даних.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="content">Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="6" required></textarea>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Publish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-7">
+        <h1 class="h3 mb-3">Recent Posts</h1>
+        <div class="list-group">
+            {% for post in posts %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h2 class="h5 mb-1">{{ post.title }}</h2>
+                            <p class="text-muted mb-1">{{ post.created_at.strftime('%Y-%m-%d') }}</p>
+                            <p class="mb-2">{{ post.content[:180] }}{% if post.content|length > 180 %}...{% endif %}</p>
+                            <a href="{{ url_for('main.blog_detail', post_id=post.id) }}" target="_blank">View live</a>
+                        </div>
+                        <form action="{{ url_for('admin.delete_blog_post', post_id=post.id) }}" method="post" onsubmit="return confirm('Delete this post?');">
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.edit_blog_post', post_id=post.id) }}">Edit</a>
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No posts yet. The scheduler will generate one daily, or publish manually.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

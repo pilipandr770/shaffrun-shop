@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title or shop_name }}</title>
+    <meta name="description" content="{{ page_description or 'Premium saffron products from Voloskyi Saffron.' }}">
+    <meta name="author" content="{{ shop_name }}">
+    <meta property="og:title" content="{{ page_title or shop_name }}">
+    <meta property="og:description" content="{{ page_description or 'Premium saffron products from Voloskyi Saffron.' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ base_url }}{{ request.path }}">
+    <meta property="og:site_name" content="{{ shop_name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="{{ base_url }}{{ request.path }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">{{ shop_name }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.catalog') }}">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.blog_list') }}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.documents') }}">Documents</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}#assistant">AI Seller</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.login') }}">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="py-5">
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer class="site-footer mt-auto py-4">
+    <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3">
+        <p class="mb-0 text-muted">&copy; {{ current_year }} {{ shop_name }}. Crafted with saffron &amp; data.</p>
+        <div class="d-flex gap-3">
+            <a class="footer-link" href="{{ url_for('main.blog_list') }}">Blog</a>
+            <a class="footer-link" href="{{ url_for('main.documents') }}">Documents</a>
+            <a class="footer-link" href="mailto:hello@voloskyisaffron.com">Contact</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

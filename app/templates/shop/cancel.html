@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-6 mb-3">Checkout cancelled</h1>
+    <p class="lead">Your payment was not completed. You can continue browsing our saffron collection.</p>
+    <a class="btn btn-outline-primary mt-3" href="{{ url_for('shop.catalog') }}">Return to catalog</a>
+</div>
+{% endblock %}

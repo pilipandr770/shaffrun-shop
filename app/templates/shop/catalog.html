@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row g-5">
+    <aside class="col-12 col-lg-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Categories</h2>
+                <ul class="list-unstyled mb-0">
+                    {% for category in categories %}
+                        <li class="mb-2">
+                            <a class="text-decoration-none" href="{{ url_for('shop.category', category_id=category.id) }}">{{ category.name }}</a>
+                        </li>
+                    {% else %}
+                        <li class="text-muted">No categories yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </aside>
+    <section class="col-12 col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h3 mb-0">All Products</h1>
+            <form class="d-flex" method="get" action="{{ url_for('shop.search') }}">
+                <input class="form-control me-2" name="q" placeholder="Search saffron" type="search">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="content-grid">
+            {% for product in products %}
+                <article class="content-card product-card h-100">
+                    <div class="media-frame">
+                        {% if product.image_data %}
+                            <img alt="{{ product.title }}" src="{{ url_for('shop.product_image', product_id=product.id) }}">
+                        {% else %}
+                            <div class="media-placeholder">Фото скоро</div>
+                        {% endif %}
+                    </div>
+                    <div class="content-card-body">
+                        <h2 class="h5">{{ product.title }}</h2>
+                        <p class="text-muted flex-grow-1">{{ product.description[:140] }}{% if product.description|length > 140 %}…{% endif %}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">€{{ '%.2f'|format(product.price) }}</span>
+                            <a class="btn btn-soft" href="{{ url_for('shop.product', product_id=product.id) }}">Переглянути</a>
+                        </div>
+                    </div>
+                </article>
+            {% else %}
+                <p class="text-muted">Додайте товари в адмін-панелі, щоби бачити їх у каталозі.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Admin Dashboard</h1>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.logout') }}">Sign out</a>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Products</p>
+                <p class="display-6 mb-0">{{ stats.products }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Categories</p>
+                <p class="display-6 mb-0">{{ stats.categories }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Blog posts</p>
+                <p class="display-6 mb-0">{{ stats.blog_posts }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Documents</p>
+                <p class="display-6 mb-0">{{ stats.documents }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="h4 mb-3">Quick actions</h2>
+<div class="row g-3 mb-5">
+    <div class="col-12 col-md-3"><a class="btn btn-primary w-100" href="{{ url_for('admin.add_product') }}">Add product</a></div>
+    <div class="col-12 col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.categories') }}">Manage categories</a></div>
+    <div class="col-12 col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.blog_posts') }}">Manage blog</a></div>
+    <div class="col-12 col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.documents_admin') }}">Manage documents</a></div>
+</div>
+
+<h2 class="h4 mb-3">Latest products</h2>
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Available</th>
+                <th scope="col">Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in latest_products %}
+                <tr>
+                    <td><a href="{{ url_for('shop.product', product_id=product.id) }}" target="_blank">{{ product.title }}</a></td>
+                    <td>€{{ '%.2f'|format(product.price) }}</td>
+                    <td>
+                        {% if product.is_available %}
+                            <span class="badge bg-success">Yes</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ product.created_at.strftime('%Y-%m-%d') }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-muted">No products yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

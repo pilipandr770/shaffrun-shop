@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-4">Add Product</h1>
+<form method="post" enctype="multipart/form-data">
+    <div class="row g-3">
+        <div class="col-12">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" id="title" name="title" required>
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="price">Price (EUR)</label>
+            <input class="form-control" id="price" min="0" name="price" step="0.01" type="number" required>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="category_id">Category</label>
+            <select class="form-select" id="category_id" name="category_id">
+                <option value="">Unassigned</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-end">
+            <div class="form-check">
+                <input class="form-check-input" id="is_available" name="is_available" type="checkbox" checked>
+                <label class="form-check-label" for="is_available">Available</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="image">Product image</label>
+            <input class="form-control" id="image" name="image" type="file" accept="image/*">
+            <small class="text-muted">Зображення зберігається в базі даних (JPG/PNG, до 3MB).</small>
+        </div>
+    </div>
+    <div class="mt-4 d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" href="{{ url_for('admin.products') }}">Cancel</a>
+        <button class="btn btn-primary" type="submit">Save product</button>
+    </div>
+</form>
+{% endblock %}

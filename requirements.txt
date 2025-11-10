@@ -1,0 +1,11 @@
+Flask
+Flask_SQLAlchemy
+Flask_Migrate
+Flask_Login
+python-dotenv
+stripe
+openai
+requests
+gunicorn
+apscheduler
+psycopg2-binary

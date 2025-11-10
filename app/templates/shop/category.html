@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ cat.name }}</h1>
+        <p class="text-muted mb-0">{{ cat.description or 'Carefully curated saffron items.' }}</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('shop.catalog') }}">Back to catalog</a>
+</div>
+<div class="content-grid">
+    {% set available_products = [product for product in cat.products if product.is_available] %}
+    {% for product in available_products %}
+        <article class="content-card product-card h-100">
+            <div class="media-frame">
+                {% if product.image_data %}
+                    <img alt="{{ product.title }}" src="{{ url_for('shop.product_image', product_id=product.id) }}">
+                {% else %}
+                    <div class="media-placeholder">Фото скоро</div>
+                {% endif %}
+            </div>
+            <div class="content-card-body">
+                <h2 class="h5">{{ product.title }}</h2>
+                <p class="text-muted flex-grow-1">{{ product.description[:140] }}{% if product.description|length > 140 %}…{% endif %}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="price-tag">€{{ '%.2f'|format(product.price) }}</span>
+                    <a class="btn btn-soft" href="{{ url_for('shop.product', product_id=product.id) }}">Переглянути</a>
+                </div>
+            </div>
+        </article>
+    {% else %}
+        <p class="text-muted">У цій категорії поки немає активних товарів.</p>
+    {% endfor %}
+</div>
+{% endblock %}

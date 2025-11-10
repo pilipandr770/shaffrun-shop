@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="mx-auto" style="max-width: 760px;">
+    <a class="text-decoration-none d-inline-flex align-items-center mb-3" href="{{ url_for('main.blog_list') }}">
+        &larr; Back to blog
+    </a>
+    <h1 class="mb-3">{{ post.title }}</h1>
+    <p class="text-muted">Published on {{ post.created_at.strftime('%B %d, %Y') }}</p>
+    {% if post.image_data %}
+        <img alt="{{ post.title }}" class="img-fluid rounded shadow-glow mb-4" src="{{ url_for('main.blog_image', post_id=post.id) }}">
+    {% endif %}
+    <div class="lead">{{ post.content|safe }}</div>
+</article>
+{% endblock %}

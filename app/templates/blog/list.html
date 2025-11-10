@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Saffron Insights</h1>
+<p class="text-muted">Daily stories generated with OpenAI to help you market, cook, and learn about saffron.</p>
+<div class="content-grid">
+    {% for post in posts %}
+        <article class="content-card h-100">
+            {% if post.image_data %}
+                <div class="media-frame media-frame--wide">
+                    <img alt="{{ post.title }}" src="{{ url_for('main.blog_image', post_id=post.id) }}">
+                </div>
+            {% endif %}
+            <div class="content-card-body">
+                <h2 class="h5">{{ post.title }}</h2>
+                <p class="text-muted small mb-2">{{ post.created_at.strftime('%d %b %Y') }}</p>
+                <p class="text-muted mb-3">{{ post.content[:220] }}{% if post.content|length > 220 %}…{% endif %}</p>
+                <a class="link-arrow" href="{{ url_for('main.blog_detail', post_id=post.id) }}">Читати більше</a>
+            </div>
+        </article>
+    {% else %}
+        <p class="text-muted">Свежий контент з'явиться після першої автоматичної публікації.</p>
+    {% endfor %}
+</div>
+{% endblock %}
