@@ -20,4 +20,11 @@ class Config:
     SHOP_NAME = os.getenv("SHOP_NAME", "Saffron Shop")
     BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:5000")
     DB_SCHEMA = os.getenv("DB_SCHEMA")
-    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
+    _schema = os.getenv("DB_SCHEMA")
+    _options = []
+    if _schema:
+        _options.append(f"-c search_path={_schema},public")
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "connect_args": {"options": " ".join(_options)} if _options else {},
+    }
