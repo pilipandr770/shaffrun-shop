@@ -54,6 +54,8 @@ class BlogPost(db.Model):
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    file_path = db.Column(db.String(300), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    file_name = db.Column(db.String(255), nullable=False)
+    file_mimetype = db.Column(db.String(255), nullable=False)
+    file_data = db.Column(db.LargeBinary, nullable=False)
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

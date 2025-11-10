@@ -1,9 +1,10 @@
 from datetime import datetime
+import os
 from typing import Optional
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade as migrate_upgrade
 from flask_login import LoginManager
 from sqlalchemy import event, text
 
@@ -38,6 +39,23 @@ def _configure_postgres_schema(app: Flask) -> None:
             connection.execute(text(f'SET search_path TO "{schema}", public'))
 
 
+def _run_database_migrations(app: Flask) -> None:
+    if app.testing:
+        return
+
+    if os.getenv("AUTO_DB_UPGRADE", "1") == "0":
+        app.logger.info("Skipping automatic database upgrade due to AUTO_DB_UPGRADE=0")
+        return
+
+    with app.app_context():
+        try:
+            migrate_upgrade()
+            app.logger.info("Database schema verified via automatic upgrade.")
+        except Exception:
+            app.logger.exception("Automatic database upgrade failed.")
+            raise
+
+
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -46,6 +64,7 @@ def create_app() -> Flask:
     migrate.init_app(app, db)
     login_manager.init_app(app)
     _configure_postgres_schema(app)
+    _run_database_migrations(app)
 
     from app.models import User  # noqa: WPS433 (import inside function to avoid circular import)
 

@@ -6,14 +6,15 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <h1 class="h4">Upload Document</h1>
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label class="form-label" for="title">Title</label>
                         <input class="form-control" id="title" name="title" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="file_path">File URL</label>
-                        <input class="form-control" id="file_path" name="file_path" placeholder="https://..." required>
+                        <label class="form-label" for="file">Document File</label>
+                        <input class="form-control" id="file" name="file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt,.zip" required>
+                        <small class="text-muted">Max 10MB. The file is stored securely in the database.</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="description">Description</label>
@@ -31,12 +32,16 @@
                 <div class="list-group-item d-flex justify-content-between align-items-start">
                     <div>
                         <h2 class="h5 mb-1">{{ doc.title }}</h2>
+                        <p class="mb-1"><small class="text-muted">{{ doc.file_name }}</small></p>
                         <p class="text-muted mb-1">{{ doc.description or 'No description provided.' }}</p>
                         <small class="text-muted">{{ doc.uploaded_at.strftime('%Y-%m-%d') }}</small>
                     </div>
-                    <form action="{{ url_for('admin.delete_document', doc_id=doc.id) }}" method="post" onsubmit="return confirm('Delete this document?');">
-                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                    </form>
+                    <div class="d-flex flex-column align-items-end gap-2">
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('main.download_document', doc_id=doc.id) }}" target="_blank" rel="noopener">Download</a>
+                        <form action="{{ url_for('admin.delete_document', doc_id=doc.id) }}" method="post" onsubmit="return confirm('Delete this document?');">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
                 </div>
             {% else %}
                 <p class="text-muted">No documents uploaded yet.</p>

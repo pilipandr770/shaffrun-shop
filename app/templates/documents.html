@@ -5,7 +5,7 @@
 <p class="text-muted">Download quality certificates, product specifications, and legal documents maintained by Voloskyi Saffron.</p>
 <div class="list-group">
     {% for doc in docs %}
-        <a class="list-group-item list-group-item-action" href="{{ doc.file_path }}" target="_blank" rel="noopener">
+        <a class="list-group-item list-group-item-action" href="{{ url_for('main.download_document', doc_id=doc.id) }}" target="_blank" rel="noopener">
             <h2 class="h6 mb-1">{{ doc.title }}</h2>
             <p class="mb-1 text-muted">{{ doc.description or 'Supporting document' }}</p>
             <small class="text-muted">Uploaded {{ doc.uploaded_at.strftime('%Y-%m-%d') }}</small>

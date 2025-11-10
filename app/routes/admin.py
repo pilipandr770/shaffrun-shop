@@ -18,6 +18,7 @@ def _get_category_options():
 
 
 MAX_IMAGE_BYTES = 3 * 1024 * 1024
+MAX_DOCUMENT_BYTES = 10 * 1024 * 1024
 
 
 def _extract_image_payload(upload: FileStorage) -> Tuple[bytes, str, str] | Tuple[None, None, None]:
@@ -273,10 +274,28 @@ def generate_blog_post_now():
 def documents_admin():
     if request.method == "POST":
         form = request.form
+        upload = request.files.get("file")
+        if not upload or not upload.filename:
+            flash("Please choose a document to upload.", "warning")
+            return redirect(url_for("admin.documents_admin"))
+
+        payload = upload.read()
+        if not payload:
+            flash("Uploaded document is empty.", "warning")
+            return redirect(url_for("admin.documents_admin"))
+
+        if len(payload) > MAX_DOCUMENT_BYTES:
+            flash("Document is too large (max 10MB).", "warning")
+            return redirect(url_for("admin.documents_admin"))
+
+        filename = secure_filename(upload.filename) or upload.filename or "document"
+
         doc = Document(
             title=form.get("title", "").strip(),
             description=form.get("description", ""),
-            file_path=form.get("file_path", ""),
+            file_name=filename,
+            file_mimetype=upload.mimetype or "application/octet-stream",
+            file_data=payload,
         )
         db.session.add(doc)
         db.session.commit()

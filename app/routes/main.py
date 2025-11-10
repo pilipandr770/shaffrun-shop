@@ -45,6 +45,19 @@ def documents():
     )
 
 
+@bp.route("/documents/<int:doc_id>/download")
+def download_document(doc_id: int):
+    doc = Document.query.get_or_404(doc_id)
+    if not doc.file_data:
+        abort(404)
+
+    return send_file(
+        io.BytesIO(doc.file_data),
+        mimetype=doc.file_mimetype or "application/octet-stream",
+        download_name=doc.file_name or f"document-{doc_id}",
+    )
+
+
 @bp.route("/blog")
 def blog_list():
     posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
