@@ -76,3 +76,6 @@ def create_app() -> Flask:
     start_scheduler(app)
 
     return app
+
+
+app = create_app()
