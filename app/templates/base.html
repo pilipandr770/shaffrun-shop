@@ -59,10 +59,13 @@
 <footer class="site-footer mt-auto py-4">
     <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3">
         <p class="mb-0 text-muted">&copy; {{ current_year }} {{ shop_name }}. Crafted with saffron &amp; data.</p>
-        <div class="d-flex gap-3">
+        <div class="d-flex flex-wrap justify-content-center gap-3">
             <a class="footer-link" href="{{ url_for('main.blog_list') }}">Blog</a>
             <a class="footer-link" href="{{ url_for('main.documents') }}">Documents</a>
             <a class="footer-link" href="mailto:hello@voloskyisaffron.com">Contact</a>
+            <a class="footer-link" href="{{ url_for('main.documents') }}#datenschutz">Datenschutz</a>
+            <a class="footer-link" href="{{ url_for('main.documents') }}#agb">AGB</a>
+            <a class="footer-link" href="{{ url_for('main.documents') }}#impressum">Impressum</a>
         </div>
     </div>
 </footer>

@@ -3,6 +3,22 @@
 {% block content %}
 <h1 class="mb-4">Certificates & Documents</h1>
 <p class="text-muted">Download quality certificates, product specifications, and legal documents maintained by Voloskyi Saffron.</p>
+
+<section class="mb-4" id="datenschutz">
+    <h2 class="h5 mb-2">Datenschutz</h2>
+    <p class="text-muted mb-0">Unsere Datenschutzrichtlinie erläutert, wie wir personenbezogene Daten verarbeiten und schützen. Laden Sie die vollständigen Informationen unten herunter.</p>
+</section>
+
+<section class="mb-4" id="agb">
+    <h2 class="h5 mb-2">AGB</h2>
+    <p class="text-muted mb-0">Die Allgemeinen Geschäftsbedingungen regeln unsere Leistungen, Lieferbedingungen und Zahlungsmodalitäten.</p>
+</section>
+
+<section class="mb-4" id="impressum">
+    <h2 class="h5 mb-2">Impressum</h2>
+    <p class="text-muted mb-0">Rechtliche Angaben zum Betreiber dieser Website inklusive Kontakt- und Unternehmensinformationen.</p>
+</section>
+
 <div class="list-group">
     {% for doc in docs %}
         <a class="list-group-item list-group-item-action" href="{{ url_for('main.download_document', doc_id=doc.id) }}" target="_blank" rel="noopener">
